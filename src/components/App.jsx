@@ -9,12 +9,14 @@ export function App() {
   const [contacts, setContacts] = useState(() => {
     return JSON.parse(localStorage.getItem('contacts')) ?? [];
   });
+
   const [filter, setFilter] = useState('');
 
   useEffect(
     () => window.localStorage.setItem('contacts', JSON.stringify(contacts)),
     [contacts]
   );
+
   const addContact = (name, number) => {
     const added = contacts.some(
       contact => contact.name.toLowerCase().trim() === name.toLowerCase().trim()
@@ -30,15 +32,23 @@ export function App() {
       setContacts(prevContacts => [newContact, ...prevContacts]);
     }
   };
+
   const filterAll = e => {
     setFilter(e.currentTarget.value);
   };
+
   const getContacts = () => {
     const filtered = filter.toLowerCase();
     return contacts.filter(({ name }) => name.toLowerCase().includes(filtered));
   };
-  const deleteContact = contactId =>
-    setContacts(contacts.filter(({ id }) => id !== contactId));
+
+  const deleteContact = contactId => {
+  setContacts(prevContacts => {
+    return prevContacts.filter(({ id }) => id !== contactId);
+  });
+};
+  
+  
   return (
     <div>
       <h1>Phonebook</h1>
